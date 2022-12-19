@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 import Botao from "../../componentes/Botao";
 import { EntradaTexto } from "../../componentes/EntradaTexto";
+import { cadastrar } from "../../servicos/requisicoesFirebase";
 import estilos from "./estilos";
-import { auth } from "../../config/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function Cadastro({ navigation }) {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmaSenha, setConfirmaSenha] = useState("");
 
-  useEffect(() => {
-    createUserWithEmailAndPassword(auth, "teste123@email.com", "123456")
-      .then((userCredential) => {
-        console.log("userCredential", userCredential);
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
-  }, []);
+  async function realizarCadastro() {
+    const resultado = await cadastrar(email, senha, confirmaSenha);
+    if (resultado === "sucesso") {
+      Alert.alert("Usuário cadastrado com sucesso!");
+
+      setEmail("");
+      setSenha("");
+      setConfirmaSenha("");
+    } else {
+      Alert.alert(resultado);
+    }
+  }
 
   return (
     <View style={estilos.container}>
@@ -42,7 +44,13 @@ export default function Cadastro({ navigation }) {
         secureTextEntry
       />
 
-      <Botao onPress={() => {}}>CADASTRAR</Botao>
+      <Botao
+        onPress={() => {
+          realizarCadastro();
+        }}
+      >
+        CADASTRAR
+      </Botao>
     </View>
   );
 }
