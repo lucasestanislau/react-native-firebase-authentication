@@ -4,14 +4,21 @@ import Botao from "../../componentes/Botao";
 import { EntradaTexto } from "../../componentes/EntradaTexto";
 import { cadastrar } from "../../servicos/requisicoesFirebase";
 import estilos from "./estilos";
+import { alteraDados } from "../../utils/comum";
 
 export default function Cadastro({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [confirmaSenha, setConfirmaSenha] = useState("");
+  const [dados, setDados] = useState({
+    email: "",
+    senha: "",
+    confirmaSenha: "",
+  });
 
   async function realizarCadastro() {
-    const resultado = await cadastrar(email, senha, confirmaSenha);
+    const resultado = await cadastrar(
+      dados.email,
+      dados.senha,
+      dados.confirmaSenha
+    );
     if (resultado === "sucesso") {
       Alert.alert("Usuário cadastrado com sucesso!");
 
@@ -27,20 +34,22 @@ export default function Cadastro({ navigation }) {
     <View style={estilos.container}>
       <EntradaTexto
         label="E-mail"
-        value={email}
-        onChangeText={(texto) => setEmail(texto)}
+        value={dados.email}
+        onChangeText={(texto) => alteraDados("email", texto, dados, setDados)}
       />
       <EntradaTexto
         label="Senha"
-        value={senha}
-        onChangeText={(texto) => setSenha(texto)}
+        value={dados.senha}
+        onChangeText={(texto) => alteraDados("senha", texto, dados, setDados)}
         secureTextEntry
       />
 
       <EntradaTexto
         label="Confirmar Senha"
-        value={confirmaSenha}
-        onChangeText={(texto) => setConfirmaSenha(texto)}
+        value={dados.confirmaSenha}
+        onChangeText={(texto) =>
+          alteraDados("confirmaSenha", texto, dados, setDados)
+        }
         secureTextEntry
       />
 

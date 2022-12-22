@@ -6,10 +6,13 @@ import { logar } from "../../servicos/requisicoesFirebase";
 import estilos from "./estilos";
 import { auth } from "../../config/firebase";
 import animacaoCarregando from "../../../assets/animacaoCarregando.gif";
+import { alteraDados } from "../../utils/comum";
 
 export default function Login({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const [dados, setDados] = useState({
+    email: "",
+    senha: "",
+  });
 
   const [carregando, setCarregando] = useState(true);
 
@@ -25,7 +28,7 @@ export default function Login({ navigation }) {
   }, []);
 
   async function realizarLogin() {
-    const resultado = await logar(email, senha);
+    const resultado = await logar(dados.email, dados.senha);
 
     if (resultado) {
       navigation.replace("Principal");
@@ -44,13 +47,13 @@ export default function Login({ navigation }) {
     <View style={estilos.container}>
       <EntradaTexto
         label="E-mail"
-        value={email}
-        onChangeText={(texto) => setEmail(texto)}
+        value={dados.email}
+        onChangeText={(texto) => alteraDados("email", texto, dados, setDados)}
       />
       <EntradaTexto
         label="Senha"
-        value={senha}
-        onChangeText={(texto) => setSenha(texto)}
+        value={dados.senha}
+        onChangeText={(texto) => alteraDados("senha", texto, dados, setDados)}
         secureTextEntry
       />
 
