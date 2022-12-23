@@ -13,7 +13,16 @@ export default function Cadastro({ navigation }) {
     confirmaSenha: "",
   });
 
+  const [erroEmail, setErroEmail] = useState(false);
+  const [mensagemErroEmail, setMensagemErroEmail] = useState("");
+
   async function realizarCadastro() {
+    if (!dados.email) {
+      setErroEmail(true);
+      setMensagemErroEmail("E-mail inválido!");
+      return;
+    }
+
     const resultado = await cadastrar(
       dados.email,
       dados.senha,
@@ -36,6 +45,8 @@ export default function Cadastro({ navigation }) {
         label="E-mail"
         value={dados.email}
         onChangeText={(texto) => alteraDados("email", texto, dados, setDados)}
+        error={erroEmail}
+        messageError={mensagemErroEmail}
       />
       <EntradaTexto
         label="Senha"
